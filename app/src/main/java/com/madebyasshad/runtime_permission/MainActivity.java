@@ -31,11 +31,15 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.btnn);
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+        final String androidID = android.provider.Settings.System.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);        button.setOnClickListener(new View.OnClickListener() {
+
+
+            //TODO get android idfrom here
             @Override
             public void onClick(View v) {
                 //if
 
+                Log.i("android  id","is "+androidID);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     //use checkSelfPermission()
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -51,6 +55,17 @@ public class MainActivity extends AppCompatActivity {
                     try
                     {
                         String str=telephonyManager.getDeviceId();
+                        String phoneno=telephonyManager.getLine1Number();
+                        String operatorName=telephonyManager.getNetworkOperatorName();
+                        String simno=telephonyManager.getSimSerialNumber();
+                        int phoneCount=telephonyManager.getPhoneCount();
+
+
+                        Log.i("errrror ","not getdeviceid"+str);
+                        Log.i("errrror ","not phoneno"+phoneno);
+                        Log.i("errrror ","not operatorname"+operatorName);
+                        Log.i("errrror ","not simno"+simno);
+                        Log.i("errrror ","not honecount"+phoneCount);
                         Log.i("errrror ","not camed1"+str);
 
 
