@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private int storagepermissioncode = 1;
 
@@ -40,64 +42,105 @@ public class MainActivity extends AppCompatActivity {
                 //if
 
                 Log.i("android  id","is "+androidID);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                {
                     //use checkSelfPermission()
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(MainActivity.this, "You have already granted this permission!",
                                 Toast.LENGTH_SHORT).show();
+
+
+                        //TODO heree do any thing if permission granted
+
+                        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+
+                        try
+                        {
+                            String str=telephonyManager.getDeviceId();
+                            String phoneno=telephonyManager.getLine1Number();
+                            String operatorName=telephonyManager.getNetworkOperatorName();
+                            String simno=telephonyManager.getSimSerialNumber();
+                            int phoneCount=telephonyManager.getPhoneCount();
+                            String groupIdLevel1=telephonyManager.getGroupIdLevel1();
+                            String subscriberId=telephonyManager.getSubscriberId();
+
+                            String networkOperator=telephonyManager.getNetworkOperator();
+
+                            Log.i("errrror ","not grouplevelid"+groupIdLevel1);
+                            Log.i("errrror ","not subscrtiber"+subscriberId);
+                            Log.i("errrror ","not networkopperator"+networkOperator);
+                            Log.i("errrror ","not getdeviceid"+str);
+                            Log.i("errrror ","not phoneno"+phoneno);
+                            Log.i("errrror ","not operatorname"+operatorName);
+                            Log.i("errrror ","not simno"+simno);
+                            Log.i("errrror ","not honecount"+phoneCount);
+                            Log.i("errrror ","not camed1"+str);
+
+
+                        }
+                        catch (Exception e)
+                        {
+                            Log.i("errrror ","camed");
+                        }
+
+
+
+
                     } else {
                         requeststoragepermisssion();
                     }
 
 
-                    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-                    try
-                    {
-                        String str=telephonyManager.getDeviceId();
-                        String phoneno=telephonyManager.getLine1Number();
-                        String operatorName=telephonyManager.getNetworkOperatorName();
-                        String simno=telephonyManager.getSimSerialNumber();
-                        int phoneCount=telephonyManager.getPhoneCount();
-
-
-                        Log.i("errrror ","not getdeviceid"+str);
-                        Log.i("errrror ","not phoneno"+phoneno);
-                        Log.i("errrror ","not operatorname"+operatorName);
-                        Log.i("errrror ","not simno"+simno);
-                        Log.i("errrror ","not honecount"+phoneCount);
-                        Log.i("errrror ","not camed1"+str);
-
-
-                    }
-                    catch (Exception e)
-                    {
-                        Log.i("errrror ","camed");
-                    }
-
-
-                    //TODO do the same thing here
 
                 }
-                else {
+                else
+                    {
                     //simply use the required feature
                     //as the user has already granted permission to them during installation
 
 
+                        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)
+                        {
+                            TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+                            try
+                            {
+                                String str=telephonyManager.getDeviceId();
+                                String phoneno=telephonyManager.getLine1Number();
+                                String operatorName=telephonyManager.getNetworkOperatorName();
+                                String simno=telephonyManager.getSimSerialNumber();
+                                int phoneCount=telephonyManager.getPhoneCount();
+                                String groupIdLevel1=telephonyManager.getGroupIdLevel1();
+                                String subscriberId=telephonyManager.getSubscriberId();
 
-                    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-                    try
-                    {
+                                String networkOperator=telephonyManager.getNetworkOperator();
 
-                        String str=telephonyManager.getDeviceId();
-                        Log.i("errrror ","not camed2"+str);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.i("error ","camed");
-                    }
+                                Log.i("errrror ","not grouplevelid"+groupIdLevel1);
+                                Log.i("errrror ","not subscrtiber"+subscriberId);
+                                Log.i("errrror ","not networkopperator"+networkOperator);
+                                Log.i("errrror ","not getdeviceid"+str);
+                                Log.i("errrror ","not phoneno"+phoneno);
+                                Log.i("errrror ","not operatorname"+operatorName);
+                                Log.i("errrror ","not simno"+simno);
+                                Log.i("errrror ","not honecount"+phoneCount);
+                                Log.i("errrror ","not camed1"+str);
 
-                    //TODO do everything here
+
+                            }
+                            catch (Exception e)
+                            {
+                                Log.i("error ","camed");
+                            }
+
+                            //TODO do everything here same as that permision granted
+                        }
+                        else
+                        {
+                            requeststoragepermisssion();
+                        }
+
+
 
                 }
             }
@@ -110,8 +153,9 @@ public class MainActivity extends AppCompatActivity {
     {
         new AlertDialog.Builder(this)
                 .setTitle("Permission needed")
-                .setMessage("This permission is needed to reduce the spam unless this you cannot register complain" +
-                        "and we do not use your data in wrong purpose")
+                .setMessage("This permission is needed to reduce the spam." +
+                        "\nunless this you cannot register complain" +
+                        "\n(we do not use your data for wrong purpose)")
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -165,9 +209,8 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == storagepermissioncode)  {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Click Again for Sending", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
                 sshowdialog();
             }
         }
